@@ -14,13 +14,13 @@ public class I_Love_You extends Frame{
     TextField textField = new TextField("");
     
     public I_Love_You(){
-        setSize(720, 720);
-        setLocationRelativeTo(null);
-        setBackground(Color.cyan);
-        setVisible(true);
-        setResizable(false);
-        setTitle("I Love you every universe");
-        setLayout(null);
+        setSize(720, 720); //set width and height to form
+        setLocationRelativeTo(null); //set form to middle of the screen when run
+        setBackground(Color.cyan); // set background color
+        setVisible(true); //set element to appear on the frame
+        setResizable(false); //prevent resize frame
+        setTitle("I Love you every universe"); //set title to the form
+        setLayout(null); // prvent from use set layout manager such as flowlayout borderlayout and gridlayout
 
         label.setBounds(300, 300, 150, 20);
         label.setForeground(Color.red);
