@@ -21,6 +21,7 @@ public class Pizza extends Frame {
 
     public Pizza(){
         setLayout(null);
+
         lblKind.setBounds(100, 100, 100, 30);
         chKind.add("A");
         chKind.add("B");
@@ -41,7 +42,7 @@ public class Pizza extends Frame {
         txtTotal.setBounds(200, 450, 150, 30); add(txtTotal);
 
         setTitle("Pizza");
-        setSize(550, 500);
+        setSize(450, 500);
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
@@ -59,7 +60,6 @@ public class Pizza extends Frame {
                 else if(cbo3.getState())
                     txtService = "Large";
                 txtDisplay.append(txtService + "\n");
-                total = Integer.parseInt(txtPrice.getText());
                 total += Integer.parseInt(txtPrice.getText()) * Integer.parseInt(txtQty.getText());
                 txtTotal.setText(String.valueOf(total));
             }
