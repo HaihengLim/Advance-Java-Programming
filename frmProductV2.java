@@ -1,212 +1,217 @@
-import java.awt.Frame;
-import java.awt.Label;
-import java.awt.Panel;
-import java.awt.Font;
-import java.awt.Button;
-import java.awt.Dimension;
-import java.awt.TextField;
-import java.awt.TextArea;
-import java.awt.Color;
-import java.awt.Choice;
-import java.awt.Checkbox;
-import java.awt.CheckboxGroup;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import javax.swing.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.table.*;
+import java.time.temporal.ChronoUnit;
 
-public class frmProductV2 extends Frame implements ActionListener{
-    Label labelDisplay = new Label("SHOP", Label.CENTER);
-    Label labelColor = new Label("Color: ");
-    Label labelTotal = new Label("Total: ");
-    Button btnAdd, btnAdd5, btnAdd10, btnDec, btnDec5, btnDec10, btnClear;
-    Button btnPurchease, btnClearAll;
-    TextArea txtInvoice = new TextArea();
-    TextField txtQuantity = new TextField("0");
-    TextField txtTotal = new TextField(20);
-    Choice chProduct = new Choice();
-    CheckboxGroup cg = new CheckboxGroup();
-    Checkbox ch1 = new Checkbox("Red", cg, false);
-    Checkbox ch2 = new Checkbox("Black", cg, false);
-    Checkbox ch3 = new Checkbox("White", cg, false);
-    Checkbox ch4 = new Checkbox("Cyan", cg, false);
-    public static int quantity = 0;
-    public static double price, total, totalPrice;
-    public static String color;
-    
-    public frmProductV2(){
-        prepareGUI();
-        intFrame();
-        
-        addWindowListener(new WindowAdapter(){
-            public void windowClosing(WindowEvent e){
-                System.exit(0);
-            }
-        });
+public class frmSignUpV2 extends JFrame implements ActionListener{
+    JLabel labelDisplay, labelUsername, labelPassword, labelConfirmPassword,
+        labelDateOfBirth, labelGender;
+    TextField txtUsername, txtPassword, txtConfirmPassword, txtDate;
+    CheckboxGroup g = new CheckboxGroup();
+    Checkbox ch1, ch2;
+    Button btnSignUp, btnShow;
+    JLabel labelTel = new JLabel("Tel: ");
+    TextField txtPhone = new TextField(20);
+    JTable table;
+    DefaultTableModel model;
+    JScrollPane scrollPane;
+    public static String name;
+    public static String password, cPassword;
+    public static String gender;
+    public static String date;
+    LocalDate currentDate = LocalDate.now();
+    public static float ageLong;
+    public static String age;
+    public static String numPhone;
 
-        btnAdd.addActionListener(this);
-        btnAdd5.addActionListener(this);
-        btnAdd10.addActionListener(this);
-        btnDec.addActionListener(this);
-        btnDec5.addActionListener(this);
-        btnDec10.addActionListener(this);
-        btnClear.addActionListener(this);
-        btnClearAll.addActionListener(this);
-        btnPurchease.addActionListener(this);
+    public frmSignUpV2(){
+        GUI();
+        initialize();
+        buttonAction();
     }
 
-    public void prepareGUI(){
-        txtTotal.setText("0");
-        labelDisplay.setFont(new Font("Arial", Font.BOLD, 30));
-        labelDisplay.setForeground(Color.red);
-        txtInvoice.setEditable(false);
-        txtQuantity.setEditable(false);
-        txtTotal.setEditable(false);
-
-        Panel p1 = new Panel(new FlowLayout());
-        p1.add(labelDisplay);
-
-        Panel p2 = new Panel(new FlowLayout());
-        chProduct.add("Nintendo Switch: 249.99$");
-        chProduct.add("Steam Deck Oled: 499.99$");
-        chProduct.add("Lenovo Legion go: 699.99$");
-        chProduct.add("MSI Claw: 449.99$");
-        chProduct.add("ROG ALLY: 699.99$");
-        chProduct.add("ROG ALLY X: 799.99$");
-        p2.add(chProduct);
-
-        Panel p3 = new Panel(new FlowLayout());
-        p3.add(labelColor);
-        Panel panelCheckbox = new Panel(new FlowLayout());
+    public void GUI(){
+        prepareGUI();
+        JPanel panelCheckbox = new JPanel(new FlowLayout());
         panelCheckbox.add(ch1);
         panelCheckbox.add(ch2);
-        panelCheckbox.add(ch3);
-        panelCheckbox.add(ch4);
-        p3.add(panelCheckbox);
 
-        Panel p4 = new Panel(new FlowLayout(FlowLayout.CENTER));
-        p4.add(txtQuantity);
-        p4.add(btnAdd = new Button("+1"));
-        p4.add(btnAdd5 = new Button("+5"));
-        p4.add(btnAdd10 = new Button("+10"));
-        p4.add(btnDec = new Button("-1"));
-        p4.add(btnDec5 = new Button("-5"));
-        p4.add(btnDec10 = new Button("-10"));
-        p4.add(btnClear = new Button("Clear"));
+        JPanel p1 = new JPanel(new FlowLayout());
+        p1.add(labelDisplay);
 
-        Panel p5 = new Panel(new FlowLayout());
-        p5.add(btnPurchease = new Button("Purchease"));
-        p5.add(btnClearAll = new Button("ClearAll"));
+        JPanel p2 = new JPanel(new GridLayout(6, 2));
+        p2.add(labelUsername);
+        p2.add(txtUsername);
+        p2.add(labelGender);
+        p2.add(panelCheckbox);
+        p2.add(labelDateOfBirth);
+        p2.add(txtDate);
+        p2.add(labelTel);
+        p2.add(txtPhone);
+        p2.add(labelPassword);
+        p2.add(txtPassword);
+        p2.add(labelConfirmPassword);
+        p2.add(txtConfirmPassword);
 
-        Panel p6 = new Panel(new FlowLayout());
-        txtInvoice.setPreferredSize(new Dimension(500, 100));
-        p6.add(txtInvoice);
+        JPanel p3 = new JPanel(new FlowLayout());
+        p3.add(btnShow);
+        p3.add(btnSignUp);
 
-        Panel p7 = new Panel(new FlowLayout());
-        p7.add(labelTotal);
-        p7.add(txtTotal);
+        JPanel p4 = new JPanel(new FlowLayout());
+        p4.add(scrollPane);
 
-        Panel p23 = new Panel(new BorderLayout());
-        p23.add(p2, BorderLayout.NORTH);
-        p23.add(p3, BorderLayout.CENTER);
+        JPanel p12 = new JPanel(new BorderLayout());
+        p12.add(p1, BorderLayout.NORTH);
+        p12.add(p2, BorderLayout.CENTER);
 
-        Panel p45 = new Panel(new BorderLayout());
-        p45.add(p4, BorderLayout.NORTH);
-        p45.add(p5, BorderLayout.CENTER);
+        JPanel p34 = new JPanel(new BorderLayout());
+        p34.add(p3, BorderLayout.NORTH);
+        p34.add(p4, BorderLayout.CENTER);
 
-        Panel p67 = new Panel(new BorderLayout());
-        p67.add(p6, BorderLayout.NORTH);
-        p67.add(p7, BorderLayout.CENTER);
-
-        Panel p123 = new Panel(new BorderLayout());
-        p123.add(p1, BorderLayout.NORTH);
-        p123.add(p23, BorderLayout.CENTER);
-
-        Panel p4567 = new Panel();
-        p4567.add(p45, BorderLayout.NORTH);
-        p4567.add(p67, BorderLayout.CENTER);
-
-        Panel p = new Panel(new BorderLayout());
-        p.add(p123, BorderLayout.NORTH);
-        p.add(p4567, BorderLayout.CENTER);
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(p12, BorderLayout.NORTH);
+        p.add(p34, BorderLayout.CENTER);
 
         add(p);
     }
 
-    public void intFrame(){
-        setSize(550, 450);
+    public void prepareGUI(){
+        labelDisplay = new JLabel("Sign Up");
+        labelDisplay.setFont(new Font("Arial", Font.BOLD, 30));
+        labelDisplay.setForeground(Color.red);
+        labelUsername = new JLabel("Username: ");
+        labelPassword = new JLabel("Password: ");
+        labelConfirmPassword = new JLabel("Confirm Password: ");
+        txtUsername = new TextField(20);
+        txtPassword = new TextField(20);
+        txtPassword.setEchoChar('*');
+        txtConfirmPassword = new TextField(20);
+        txtConfirmPassword.setEchoChar('*');
+        btnSignUp = new Button("Sign Up");
+        btnSignUp.setFont(new Font("Times New Roman", Font.BOLD, 18));
+        btnSignUp.setForeground(Color.blue);
+        btnSignUp.setPreferredSize(new Dimension(100, 25));
+        model = new DefaultTableModel();
+        model.addColumn("Username");
+        model.addColumn("Gender");
+        model.addColumn("Date of Birth");
+        model.addColumn("Age");
+        model.addColumn("Tel");
+        model.addColumn("Password");
+        table = new JTable(model);
+        scrollPane = new JScrollPane(table);
+        ch1 = new Checkbox("Male", g, false);
+        ch2 = new Checkbox("Female", g, false);
+        txtDate = new TextField(20);
+        labelGender = new JLabel("Gender: ");
+        labelDateOfBirth = new JLabel("Date of Birth: ");
+        txtDate = new TextField(20);
+        btnShow = new Button("Show");
+    }
+
+    public void initialize(){
+        setSize(550, 400);
         setLocationRelativeTo(null);
         setVisible(true);
         setResizable(false);
-        setTitle("Shop");
+        setTitle("Sign Up");
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        addDateFormatter();
+    }
+
+    public void buttonAction(){
+        btnShow.addActionListener(this);
+        btnSignUp.addActionListener(this);
     }
 
     public void actionPerformed(ActionEvent e){
-        if(e.getSource() == btnAdd){
-            quantity++;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnAdd5){
-            quantity += 5;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnAdd10){
-            quantity += 10;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnDec){
-            quantity--;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnDec5){
-            quantity -= 5;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnDec10){
-            quantity -= 10;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnClear){
-            quantity = 0;
-            txtQuantity.setText(quantity + "");
-        }
-        else if(e.getSource() == btnPurchease){
-            if(chProduct.getSelectedItem() == "Nintendo Switch: 249.99$")
-                price = 249.99;
-            else if(chProduct.getSelectedItem() == "Steam Deck Oled: 499.99$")
-                price = 499.99;
-            else if(chProduct.getSelectedItem() == "Lenovo Legion go: 699.99$")
-                price = 699.99;
-            else if(chProduct.getSelectedItem() == "MSI Claw: 449.99$")
-                price = 499.99;
-            else if(chProduct.getSelectedItem() == "ROG ALLY: 699.99$")
-                price = 699.99;
-            else if(chProduct.getSelectedItem() == "ROG ALLY X: 799.99$")
-                price = 799.99;
+        if(e.getSource() == btnShow){
+            if(btnShow.getLabel().equals("Show")){
+                btnShow.setLabel("Hide");
+                txtPassword.setEchoChar('\0');
+                txtConfirmPassword.setEchoChar('\0');
+            } else{
+                btnShow.setLabel("Show");
+                txtPassword.setEchoChar('*');
+                txtConfirmPassword.setEchoChar('*');
+            }
 
-            if(ch1.getState())
-                color = "Red";
-            else if(ch2.getState())
-                color = "Black";
-            else if(ch3.getState())
-                color = "White";
-            else if(ch4.getState())
-                color = "Cyan";
-            totalPrice = price * quantity;
-            total += totalPrice;
-            txtInvoice.append(chProduct.getSelectedItem() + "\t" + color + "\t" + price + "$\t\t" + quantity + "\t" + totalPrice + "$\n");
-            txtTotal.setText(total + "");
         }
-        else if(e.getSource() == btnClearAll){
-            txtInvoice.setText("");
-            txtTotal.setText("0");
-            txtQuantity.setText("0");
-            quantity = 0;
-            total = 0;
+        else if(e.getSource() == btnSignUp){
+            name = txtUsername.getText();
+            password = txtPassword.getText();
+            cPassword = txtConfirmPassword.getText();
+            date = txtDate.getText();
+            if(ch1.getState())
+                gender = "Male";
+            else if(ch2.getState())
+                gender = "Female";
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+            LocalDate dateFormatted = LocalDate.parse(date, formatter);
+            ageLong = ChronoUnit.YEARS.between(dateFormatted, currentDate);
+            age = String.format("%.0f", ageLong);
+            model.addRow(new Object[]{name, gender, date, age + " years old", password});
         }
     }
 
-    public static void main(String[] args){new frmProductV2();}
+    public void addDateFormatter(){
+        txtDate.addKeyListener(new KeyAdapter(){
+            public void keyTyped(KeyEvent e){
+                char ch = e.getKeyChar();
+                if(!Character.isDigit(ch) && ch!='\b'){
+                    e.consume();
+                    return;
+                }
+
+                String text = txtDate.getText();
+                int len = text.length();
+
+                if(len >= 10 && ch != '\b'){
+                    e.consume();
+                    return;
+                }
+
+                if(len == 2 || len == 5 && ch != '\b'){
+                    int pos = txtDate.getCaretPosition();
+                    String newDate = text + "-" + ch;
+                    txtDate.setText(newDate);
+                    txtDate.setCaretPosition(pos + 2);
+                    e.consume();
+                }
+            }
+        });
+
+        txtPhone.addKeyListener(new KeyAdapter(){
+            public void keyTyped(KeyEvent e){
+                char ch = e.getKeyChar();
+                if(!Character.isDigit(ch) && ch != '\b'){
+                    e.consume();
+                    return;
+                }
+
+                String text = txtPhone.getText();
+                int len = text.length();
+
+                if(len >= 12 && ch != '\b'){
+                    e.consume();
+                    return;
+                }
+                
+                if(len == 3 || len == 7 && ch != '\b'){
+                    int pos = txtPhone.getCaretPosition();
+                    String newText = text + "-" + ch;
+                    txtPhone.setText(newText);
+                    txtPhone.setCaretPosition(pos + 2);
+                    e.consume();
+                }
+            }
+        });
+    }
+
+    public static void main(String[] args){new frmSignUpV2();}
 }
