@@ -1,0 +1,141 @@
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class frmProductV4 extends JFrame implements ActionListener{
+    JLabel labelDisplay = new JLabel("Product Lists");
+    JButton btnAdd, btnClear, btnRemove;
+    JTextField txtId, txtName, txtQuantity, txtPrice;
+    JTable table;
+    DefaultTableModel model;
+    JScrollPane scrollPane;
+
+    public frmProductV4(){
+        GUI();
+        inintialize();
+        actionButton();
+
+    }
+
+    public void GUI(){
+        prepareGUI();
+        JPanel p1 = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        p1.add(labelDisplay);
+
+        JPanel p2 = new JPanel(new GridLayout(4, 2));
+        p2.add(new JLabel("Id: "));
+        p2.add(txtId);
+        p2.add(new JLabel("Name: "));
+        p2.add(txtName);
+        p2.add(new JLabel("Quantity: "));
+        p2.add(txtQuantity);
+        p2.add(new JLabel("Price: "));
+        p2.add(txtPrice);
+
+        JPanel p3 = new JPanel(new FlowLayout());
+        p3.add(btnAdd);
+        p3.add(btnRemove);
+        p3.add(btnClear);
+
+        JPanel p4 = new JPanel(new FlowLayout());
+        p4.add(scrollPane);
+
+        JPanel p12 = new JPanel(new BorderLayout());
+        p12.add(p1, BorderLayout.NORTH);
+        p12.add(p2, BorderLayout.CENTER);
+
+        JPanel p34 = new JPanel(new BorderLayout());
+        p34.add(p3, BorderLayout.NORTH);
+        p34.add(p4, BorderLayout.CENTER);
+
+        JPanel p = new JPanel(new BorderLayout());
+        p.add(p12, BorderLayout.NORTH);
+        p.add(p34, BorderLayout.CENTER);
+
+        add(p);
+    }
+
+    public void prepareGUI(){
+        labelDisplay.setFont(new Font("Arial", Font.BOLD, 30));
+        labelDisplay.setForeground(Color.red);
+
+        btnAdd = new JButton("Add");
+        btnRemove = new JButton("Remove");
+        btnClear = new JButton("Clear");
+
+        txtName = new JTextField(20);
+        txtId = new JTextField(20);
+        txtQuantity = new JTextField(20);
+        txtPrice = new JTextField(20);
+
+        model = new DefaultTableModel();
+        model.addColumn("Id");
+        model.addColumn("Name");
+        model.addColumn("Quantity");
+        model.addColumn("Price");
+        table = new JTable(model);
+        scrollPane = new JScrollPane(table);
+    }
+
+    public void inintialize(){
+        setSize(700, 300);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setVisible(true);
+        setResizable(false);
+        setTitle("Product List");
+    }
+
+    public void actionButton(){
+        btnAdd.addActionListener(this);
+        btnRemove.addActionListener(this);
+        btnClear.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e){
+        if(e.getSource() == btnAdd)
+            addNewProduct();
+        else if(e.getSource() == btnRemove)
+            removeNewProduct();
+        else if(e.getSource() == btnClear)
+            clearAllProduct();
+    }
+
+    public void addNewProduct(){
+        String id = txtId.getText();
+        String name = txtName.getText();
+        int q = Integer.parseInt(txtQuantity.getText());
+        float price = Float.parseFloat(txtPrice.getText());
+        model.addRow(new Object[] {id, name, q, price});
+        txtId.setText("");
+        txtName.setText("");
+        txtQuantity.setText("");
+        txtPrice.setText("");
+    }
+
+    public void removeNewProduct(){
+        int n = table.getRowCount();
+        for(int i = 0; i < n; i++){
+            int index = table.getSelectedRow();
+            model.removeRow(index);
+            n--;
+        }
+    }
+
+    public void clearAllProduct(){
+        model.setRowCount(0);
+    }
+
+    public static void main(String[] args){new frmProductV4();}
+}
