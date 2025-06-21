@@ -4,7 +4,8 @@ import java.io.*;
 public class WriteFile {
     public static void main(String[] args) throws Exception{
         System.out.println("Open text file to write: ");
-        FileOutputStream f = new FileOutputStream("d:\\Programming\\text\\text.txt");
+        FileOutputStream f = new FileOutputStream("d:\\Programming\\text\\text.txt"); //Your own directory file not always like this
+        
         Scanner sc = new Scanner(System.in);
         String str;
         char s = '\n';
