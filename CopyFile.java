@@ -2,8 +2,8 @@ import java.io.*;
 
 public class CopyFile {
     public static void main(String[] args) throws Exception{
-        FileInputStream f1 = new FileInputStream("d:\\Programming\\text\\text.txt");
-        FileOutputStream f2 = new FileOutputStream("d:\\Programming\\Andvance Java Programming\\RUPP\\text2.txt");
+        FileInputStream f1 = new FileInputStream("d:\\Programming\\text\\text.txt"); //Your own directory file
+        FileOutputStream f2 = new FileOutputStream("d:\\Programming\\Andvance Java Programming\\RUPP\\text2.txt"); //Your own directory file
         int c; String data = ""; char s = '\n';
         while(true){
             c = f1.read();
